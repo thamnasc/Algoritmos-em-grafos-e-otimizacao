@@ -1,9 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int **preencheMatAdj (int **matriz)
+int **alocaMatriz (int lin, int col)
+{
+    int i;
+    int **matriz;
+
+    /* aloca vetor de ponteiros de linhas da matriz */
+    matriz = malloc (lin * sizeof (int*));
+    /* aloca num vetor todos os elementos da matriz */
+    matriz[0] = calloc (lin * col, sizeof (int));
+
+    /* ajusta ponteiros de linhas */
+    for (i = 1; i < lin; i++)
+        matriz[i] = matriz[0] + i * col;
+    
+    return matriz;
+}
+
+/* lê pares de vértices vizinhos para representar na matriz de adjacência */
+/* finaliza lendo 0 0 */
+int **criaMatAdj (int n)
 {
     int u, v;
+    int **matriz = alocaMatriz(n, n);
 
     scanf ("%d %d", &u, &v);
     
@@ -28,38 +48,28 @@ void imprimeMatriz (int **matriz, int lin, int col)
             printf ("%d ", matriz[i][j]);
         printf ("\n");
     }
-    print ("\n");
+    printf ("\n");
 }
 
-int **alocaMatriz (int lin, int col)
+
+void desalocaMatriz (int **matriz)
 {
-    int i;
-    int **matriz;
-
-    /* aloca vetor de ponteiros de linhas da matriz */
-    matriz = malloc (lin * sizeof (int*));
-    /* aloca num vetor todos os elementos da matriz */
-    matriz[0] = calloc (lin * col, sizeof (int));
-
-    /* ajusta ponteiros de linhas */
-    for (i = 1; i < lin; i++)
-        matriz[i] = matriz[0] + i * col;
-    
-    return matriz;
+    free (matriz[0]);
+    free (matriz);
 }
 
-int **multiplicaMats (int **matriz, int lin, int col)
+int **multiplicaMats (int **matA, int **matB, int lin, int col)
 {
     int **result = alocaMatriz (lin, col);
 
-    int resultI, resultJ, nElem, n = lin;
+    int resultI, resultJ, index, n = lin;
 
     for (resultI = 0; resultI < lin; resultI++)
     {
         for (resultJ = 0; resultJ < col; resultJ++)
         {
-            for (nElem = 0; nElem < n; nElem++)
-                result[resultI][resultJ] += matriz[resultI][nElem] * matriz[nElem][resultJ]; 
+            for (index = 0; index < n; index++)
+                result[resultI][resultJ] += matA[resultI][index] * matB[index][resultJ]; 
         }
     }
 
@@ -68,22 +78,44 @@ int **multiplicaMats (int **matriz, int lin, int col)
 
 int main () 
 {
-    int n;
-    int **matriz, **result;
+    int n, u, v, caminho;
+    int **matAdj, **matA = NULL, **matResult;
 
+    /* lê tamanho da matriz, que é a quantidade de vértices */
     scanf ("%d", &n);
 
-    matriz = alocaMatriz (n, n);
-    preencheMatAdj (matriz);
-    imprimeMatriz (matriz, n, n);
+    matAdj = criaMatAdj (n);
+    imprimeMatriz (matAdj, n, n);
 
-    result = multiplicaMats (matriz, n, n);
-    imprimeMatriz (result, n, n);
+    /* lê par de vértices qualquer */
+    scanf("%d %d", &u, &v);
 
-    free (result[0]);
-    free (result);
-    free (matriz[0]);
-    free (matriz);
+    /* encontra menor número de arestas necessárias para chegar de um vértice a outro */
+    matResult = multiplicaMats (matAdj, matAdj, n, n);
+    imprimeMatriz (matResult, n, n);
+    caminho = matResult[u-1][v-1];
+
+    /* se forem vizinhos, terminou a busca */
+    if (caminho)
+        printf ("Eh preciso de %d arestas para ir do vértice %d ao %d\n", caminho, u, v);
+    else
+    {
+        while (!caminho)
+        {
+            matA = matResult;
+
+            matResult = multiplicaMats (matA, matAdj, n, n);
+            imprimeMatriz (matResult, n, n);
+
+            caminho = matResult[u-1][v-1];
+
+            desalocaMatriz (matA);
+        }
+        printf ("Eh preciso de %d arestas para ir do vértice %d ao %d\n", caminho, u, v);
+    }
+
+    desalocaMatriz (matAdj);
+    desalocaMatriz (matResult);
 
     return 0;
 }
