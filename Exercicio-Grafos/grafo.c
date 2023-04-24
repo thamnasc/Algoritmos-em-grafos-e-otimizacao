@@ -82,12 +82,12 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
   A->id = id;
   A->u = busca_chave(u_id);
   A->v = busca_chave(v_id);
-  empilha(A, G->arestas,FALTAALGOAQUI);
+  empilha(A, G->arestas, vertice_id);
 }
 
 // remove aresta com id <id> do grafo G e a destroi
 void remove_aresta(int id, grafo G) {
-  remove_chave(id, G->arestas,FALTAALGOAQUI);
+  remove_chave(id, G->arestas, aresta_id);
 }
 
 //---------------------------------------------------------
