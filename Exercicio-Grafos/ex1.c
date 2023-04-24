@@ -78,7 +78,7 @@ int **multiplicaMats (int **matA, int **matB, int lin, int col)
 
 int main () 
 {
-    int n, u, v, caminho;
+    int n, u, v, caminho, arestas = 2;
     int **matAdj, **matA = NULL, **matResult;
 
     /* lê tamanho da matriz, que é a quantidade de vértices */
@@ -88,31 +88,36 @@ int main ()
     imprimeMatriz (matAdj, n, n);
 
     /* lê par de vértices qualquer */
-    scanf("%d %d", &u, &v);
+    scanf ("%d%d", &u, &v);
 
     /* encontra menor número de arestas necessárias para chegar de um vértice a outro */
+
+    caminho = matAdj[u-1][v-1];
+    /* caso os vértices sejam vizinhos, não é preciso multiplicar matrizes */
+    if (caminho) 
+    {
+        printf ("Eh preciso de 1 aresta para ir do vértice %d ao %d\n", u, v);
+        desalocaMatriz (matAdj);
+        return 0;
+    }
+
     matResult = multiplicaMats (matAdj, matAdj, n, n);
-    imprimeMatriz (matResult, n, n);
     caminho = matResult[u-1][v-1];
 
-    /* se forem vizinhos, terminou a busca */
-    if (caminho)
-        printf ("Eh preciso de %d arestas para ir do vértice %d ao %d\n", caminho, u, v);
-    else
+    while (!caminho)
     {
-        while (!caminho)
-        {
-            matA = matResult;
+        arestas++;
+        matA = matResult;
 
-            matResult = multiplicaMats (matA, matAdj, n, n);
-            imprimeMatriz (matResult, n, n);
+        matResult = multiplicaMats (matA, matAdj, n, n);
+        imprimeMatriz (matResult, n, n);
 
-            caminho = matResult[u-1][v-1];
+        caminho = matResult[u-1][v-1];
 
-            desalocaMatriz (matA);
-        }
-        printf ("Eh preciso de %d arestas para ir do vértice %d ao %d\n", caminho, u, v);
+        desalocaMatriz (matA);
     }
+    printf ("Eh preciso de %d arestas para ir do vértice %d ao %d\n", arestas, u, v);
+    
 
     desalocaMatriz (matAdj);
     desalocaMatriz (matResult);
