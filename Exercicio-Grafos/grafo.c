@@ -57,32 +57,37 @@ void destroi_grafo(grafo G) {
 
 // cria novo vertice com id <id> e adiciona ao grafo G
 void adiciona_vertice(int id, grafo G) {
-  
-  // codificar...
-
+  vertice V = (vertice) malloc(sizeof(t_vertice));
+  if (!V)
+    exit(_ERRO_MALLOC_);
+  V->id = id;
+  V->fronteira = cria_lista();
+  empilha(V, G->vertices);
 }
 
 // remove vertice com id <id> do grafo G e o destroi
 // [deve remover e destruir tambem as arestas incidentes]
 void remove_vertice(int id, grafo G) {
   
-  // codificar...
+  
 
 }
 
 // cria aresta com id <id> incidente a vertices com
 // ids <u_id> e <v_id> e adiciona ao grafo G
 void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
-  
-  // codificar...
-
+  aresta A = (aresta) malloc(sizeof(t_aresta));
+  if (!A)
+    exit(_ERRO_MALLOC_);
+  A->id = id;
+  A->u = busca_chave(u_id);
+  A->v = busca_chave(v_id);
+  empilha(A, G->arestas,FALTAALGOAQUI);
 }
 
 // remove aresta com id <id> do grafo G e a destroi
 void remove_aresta(int id, grafo G) {
-  
-  // codificar...
-
+  remove_chave(id, G->arestas,FALTAALGOAQUI);
 }
 
 //---------------------------------------------------------
