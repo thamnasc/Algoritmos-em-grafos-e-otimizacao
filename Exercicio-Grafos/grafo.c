@@ -69,7 +69,7 @@ void adiciona_vertice(int id, grafo G) {
 // [deve remover e destruir tambem as arestas incidentes]
 void remove_vertice(int id, grafo G) {
   
-  
+  //busca_chave
 
 }
 
@@ -80,9 +80,9 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
   if (!A)
     exit(_ERRO_MALLOC_);
   A->id = id;
-  A->u = busca_chave(u_id);
-  A->v = busca_chave(v_id);
-  empilha(A, G->arestas, vertice_id);
+  A->u = busca_chave(u_id, G->vertices, vertice_id);
+  A->v = busca_chave(v_id, G->vertices, vertice_id);
+  empilha(A, G->arestas);
 }
 
 // remove aresta com id <id> do grafo G e a destroi

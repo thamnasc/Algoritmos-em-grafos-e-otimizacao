@@ -35,7 +35,7 @@ int main() {
   
   // imprime informacoes do grafo e o destroi
   imprime_grafo(G);
-  destroi_grafo(G);
+  //destroi_grafo(G);
   
   return 0;
 }
