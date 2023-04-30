@@ -49,10 +49,14 @@ grafo cria_grafo() {
 }
 
 // destroi grafo G (desaloca toda a memoria)
-void destroi_grafo(grafo G) {
-  
-  // codificar...
-  
+void destroi_grafo(grafo G) {  
+  while (!vazio(G->arestas))
+    desempilha(G->arestas);
+  free(G->arestas);
+  while (!vazio(G->vertices))
+    desempilha(G->vertices);
+  free(G->vertices);
+  free(G);
 }
 
 // cria novo vertice com id <id> e adiciona ao grafo G
@@ -68,9 +72,34 @@ void adiciona_vertice(int id, grafo G) {
 // remove vertice com id <id> do grafo G e o destroi
 // [deve remover e destruir tambem as arestas incidentes]
 void remove_vertice(int id, grafo G) {
-  
-  //busca_chave
-
+  //primeiro remove a aresta, depois o vertice, para não perder o obj
+  vertice U, V = busca_chave(id, G->vertices, vertice_id);
+  aresta A;
+  no no;
+  // percorre a lista de fronteira do vértice a ser removido
+  while (!vazio(V->fronteira))
+  {
+    U = desempilha(V->fronteira);
+    no = primeiro_no(G->arestas);
+    // percorre a lista de arestas do grafo
+    while (no != NULL)
+    {
+      A = conteudo(no);
+      // se a aresta da vez for {U, V}
+      if ((A->u == U && A->v == V) || (A->u == V && A->v == U))
+      {
+        // remove aresta {U, V}
+        remove_aresta(A->id, G);
+        // retira vertice da fronteira do vizinho U
+        remove_chave(V->id, U->fronteira, vertice_id);
+      }
+      no = proximo(no);
+    }
+  }
+  // remove V da lista de vertices do grafo
+  remove_chave(V->id, G->vertices, vertice_id);
+  free(V->fronteira);
+  free(V);
 }
 
 // cria aresta com id <id> incidente a vertices com
@@ -82,12 +111,15 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
   A->id = id;
   A->u = busca_chave(u_id, G->vertices, vertice_id);
   A->v = busca_chave(v_id, G->vertices, vertice_id);
+  empilha(A->v, A->u->fronteira);
+  empilha(A->u, A->v->fronteira);
   empilha(A, G->arestas);
 }
 
 // remove aresta com id <id> do grafo G e a destroi
 void remove_aresta(int id, grafo G) {
-  remove_chave(id, G->arestas, aresta_id);
+  aresta A = remove_chave(id, G->arestas, aresta_id);
+  free(A);
 }
 
 //---------------------------------------------------------
