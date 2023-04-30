@@ -52,17 +52,17 @@ grafo cria_grafo() {
 void destroi_grafo(grafo G) {  
   vertice v;
   aresta a;
-  while (!vazio(G->arestas))
+  while (!vazio(G->vertices))
+  {
+    v = (vertice) desempilha(G->vertices);
+    remove_vertice(vertice_id(v), G);
+  }
+/*   while (!vazio(G->arestas))
   {
     a = desempilha(G->arestas);
     remove_aresta(a, G);
-  }
+  } */
   free(G->arestas);
-  while (!vazio(G->vertices))
-  {
-    v = desempilha(G->vertices);
-    remove_vertice(v, G);
-  }
   free(G->vertices);
   free(G);
 }
@@ -81,24 +81,29 @@ void adiciona_vertice(int id, grafo G) {
 // [deve remover e destruir tambem as arestas incidentes]
 void remove_vertice(int id, grafo G) {
   //primeiro remove a aresta, depois o vertice, para não perder o obj
-  vertice V = busca_chave(id, vertices(G), vertice_id);
+  vertice V = (vertice) (busca_chave(id, vertices(G), vertice_id));
   aresta cont_AdeV, cont_AdeG;
-  no aresta_G = primeiro_no(arestas(G)), aresta_V = primeiro_no(fronteira(V));
-
+  printf("teste1\n\n");
+  no aresta_G = primeiro_no(arestas(G));
+  printf("teste2\n\n");
+  no aresta_V = primeiro_no(fronteira(V));
+  printf("teste3\n\n");
   // percorre a lista de fronteira do vértice a ser removido
   while (aresta_V != NULL)
   {
     // percorre a lista de arestas do grafo
     while (aresta_G != NULL)
     {
-      cont_AdeV = conteudo(aresta_V);
-      cont_AdeG = conteudo(aresta_G);
+      cont_AdeV = (aresta) (conteudo(aresta_V));
+      cont_AdeG = (aresta) (conteudo(aresta_G));
       // se a aresta da vez for {U, V}
       if (cont_AdeG == cont_AdeV)
       {
         // remove aresta {U, V} de cada vértice
         remove_chave(aresta_id(cont_AdeV), fronteira(vertice_u(cont_AdeV)), aresta_id);
+        printf("teste4\n\n");
         remove_chave(aresta_id(cont_AdeV), fronteira(vertice_v(cont_AdeV)), aresta_id);
+        printf("teste5\n\n");
         // remove aresta {U, V} do grafo
         remove_aresta(aresta_id(cont_AdeG), G);
       }
@@ -107,7 +112,7 @@ void remove_vertice(int id, grafo G) {
     aresta_V = proximo(aresta_V);
   }
   // remove V da lista de vertices do grafo
-  remove_chave(vertice_id(V), vertices(G), vertice_id);
+  remove_chave(id, vertices(G), vertice_id);
   free(V->fronteira);
   free(V);
 }
@@ -119,16 +124,19 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
   if (!A)
     exit(_ERRO_MALLOC_);
   A->id = id;
-  A->u = busca_chave(u_id, vertices(G), vertice_id);
-  A->v = busca_chave(v_id, vertices(G), vertice_id);
+  A->u = (vertice) (busca_chave(u_id, vertices(G), vertice_id));
+  A->v = (vertice) (busca_chave(v_id, vertices(G), vertice_id));
+  printf("testeAresta1\n\n");
   empilha(A, fronteira(vertice_u(A)));
+  printf("testeAresta2\n\n");
   empilha(A, fronteira(vertice_v(A)));
+  printf("testeAresta3\n\n");
   empilha(A, arestas(G));
 }
 
 // remove aresta com id <id> do grafo G e a destroi
 void remove_aresta(int id, grafo G) {
-  aresta A = remove_chave(id, arestas(G), aresta_id);
+  aresta A = (aresta) (remove_chave(id, arestas(G), aresta_id));
   free(A);
 }
 
