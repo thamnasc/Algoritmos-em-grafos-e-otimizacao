@@ -81,7 +81,7 @@ void adiciona_vertice(int id, grafo G) {
 // [deve remover e destruir tambem as arestas incidentes]
 void remove_vertice(int id, grafo G) {
   //primeiro remove a aresta, depois o vertice, para não perder o obj
-  vertice V = (vertice) (busca_chave(id, vertices(G), vertice_id));
+  vertice V = (vertice) (busca_chave(id, vertices(G), (int_f_obj) vertice_id));
   aresta cont_AdeV, cont_AdeG;
   printf("teste1\n\n");
   no aresta_G = primeiro_no(arestas(G));
@@ -100,9 +100,9 @@ void remove_vertice(int id, grafo G) {
       if (cont_AdeG == cont_AdeV)
       {
         // remove aresta {U, V} de cada vértice
-        remove_chave(aresta_id(cont_AdeV), fronteira(vertice_u(cont_AdeV)), aresta_id);
+        remove_chave(aresta_id(cont_AdeV), fronteira(vertice_u(cont_AdeV)), (int_f_obj) aresta_id);
         printf("teste4\n\n");
-        remove_chave(aresta_id(cont_AdeV), fronteira(vertice_v(cont_AdeV)), aresta_id);
+        remove_chave(aresta_id(cont_AdeV), fronteira(vertice_v(cont_AdeV)), (int_f_obj) aresta_id);
         printf("teste5\n\n");
         // remove aresta {U, V} do grafo
         remove_aresta(aresta_id(cont_AdeG), G);
@@ -112,7 +112,7 @@ void remove_vertice(int id, grafo G) {
     aresta_V = proximo(aresta_V);
   }
   // remove V da lista de vertices do grafo
-  remove_chave(id, vertices(G), vertice_id);
+  remove_chave(id, vertices(G), (int_f_obj) vertice_id);
   free(V->fronteira);
   free(V);
 }
@@ -124,8 +124,8 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
   if (!A)
     exit(_ERRO_MALLOC_);
   A->id = id;
-  A->u = (vertice) (busca_chave(u_id, vertices(G), vertice_id));
-  A->v = (vertice) (busca_chave(v_id, vertices(G), vertice_id));
+  A->u = (vertice) (busca_chave(u_id, vertices(G), (int_f_obj) vertice_id));
+  A->v = (vertice) (busca_chave(v_id, vertices(G), (int_f_obj) vertice_id));
   printf("testeAresta1\n\n");
   empilha(A, fronteira(vertice_u(A)));
   printf("testeAresta2\n\n");
@@ -136,7 +136,7 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
 
 // remove aresta com id <id> do grafo G e a destroi
 void remove_aresta(int id, grafo G) {
-  aresta A = (aresta) (remove_chave(id, arestas(G), aresta_id));
+  aresta A = (aresta) (remove_chave(id, arestas(G), (int_f_obj) aresta_id));
   free(A);
 }
 
