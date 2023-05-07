@@ -1,6 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+Escreva um programa que lê as seguintes informações de um grafo e constrói a sua matriz de adjacência:
+Um inteiro n indicando a quantidade vértices do grafo;
+Uma sequência de pares u e v indicando a existência da aresta {u,v} no grafo. 
+Considere que 1 ≤ u, v ≤ n e que a sequência termina com o par 0 0.
+Modifique o programa desenvolvido  para ler também, ao final, um último par de vértices u e v 
+(que não necessariamente é uma aresta do grafo) e imprima na tela a menor quantidade de arestas necessária 
+para "chegar" do vértice  u até o vértice v, usando multiplicações sucessivas da matriz de adjacência. 
+Considere que sempre é possível chegar do vértice u até o vértice v.
+*/
+
 int **alocaMatriz (int lin, int col)
 {
     int i;
