@@ -103,11 +103,8 @@ void adiciona_aresta(int id, int u_id, int v_id, grafo G) {
   A->id = id;
   A->u = (vertice) (busca_chave(u_id, vertices(G), (int_f_obj) vertice_id));
   A->v = (vertice) (busca_chave(v_id, vertices(G), (int_f_obj) vertice_id));
-  printf("testeAresta1\n\n");
   empilha(A, fronteira(vertice_u(A)));
-  printf("testeAresta2\n\n");
   empilha(A, fronteira(vertice_v(A)));
-  printf("testeAresta3\n\n");
   empilha(A, arestas(G));
 }
 
