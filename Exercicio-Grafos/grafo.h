@@ -24,6 +24,7 @@ typedef struct t_vertice {
 
 typedef struct t_aresta {
 	int id;
+	int peso;
 	vertice u, v;
 } t_aresta;
 
@@ -42,6 +43,8 @@ vertice vertice_u(aresta e);
 vertice vertice_v(aresta e);
 lista vertices(grafo G);
 lista arestas(grafo G);
+
+int peso_aresta(aresta e);
 
 //---------------------------------------------------------
 // funcoes para construcao/desconstrucao do grafo:
@@ -69,16 +72,28 @@ void remove_aresta(int id, grafo G);
 //---------------------------------------------------------
 // funcoes para operacoes com o grafo pronto:
 
+// atualiza o peso das arestas de um grafo
+int atualiza_peso_arestas(grafo G);
+
 // calcula e devolve o grau do vertice v
 int grau(vertice v);
 
 // imprime o grafo G
 void imprime_grafo(grafo G);
 
+// imprime o grafo G ponderado
+void imprime_grafo_ponderado(grafo G);
+
 // imprime o vertice v
 void imprime_vertice(vertice v);
 
 // imprime a aresta e
 void imprime_aresta(aresta e);
+
+// imprime a aresta e com peso
+void imprime_aresta_com_peso(aresta e);
+
+// atribui o peso peso da aresta e como a soma dos graus de suas pontas
+void atribui_peso(aresta e);
 
 #endif

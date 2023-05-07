@@ -35,6 +35,10 @@ lista arestas(grafo G) {
   return G->arestas;
 };
 
+int peso_aresta(aresta e){
+  return e->peso;
+}
+
 //---------------------------------------------------------
 // funcoes para construcao/desconstrucao do grafo:
 
@@ -117,6 +121,13 @@ void remove_aresta(int id, grafo G) {
 //---------------------------------------------------------
 // funcoes para operacoes com o grafo pronto:
 
+// atualiza o peso das arestas de um grafo
+int atualiza_peso_arestas(grafo G)
+{
+  for (no n = primeiro_no(arestas(G)); n; n = proximo(n))
+    atribui_peso(conteudo(n));
+}
+
 // calcula e devolve o grau do vertice v
 int grau(vertice v) {
   int d_v = 0;
@@ -136,6 +147,17 @@ void imprime_grafo(grafo G) {
   printf("\n");
 }
 
+// imprime o grafo G ponderado
+void imprime_grafo_ponderado(grafo G) {
+  printf("\nVertices: <id> - [grau]( <fronteira> )");
+  printf("\nVertices: ");
+  imprime_lista(vertices(G), (void_f_obj) imprime_vertice);
+  printf("\nArestas: <id>:{u,v}<w>");
+  printf("\nArestas: ");
+  imprime_lista(arestas(G), (void_f_obj) imprime_aresta_com_peso);
+  printf("\n");
+}
+
 // imprime o vertice v
 void imprime_vertice(vertice v) {
   printf("%d - [%d]( ", vertice_id(v), grau(v));
@@ -148,4 +170,23 @@ void imprime_aresta(aresta e) {
   int u_id = vertice_id(vertice_u(e));
   int v_id = vertice_id(vertice_v(e));
   printf("%d:{%d,%d}", aresta_id(e), u_id, v_id);
+}
+
+// imprime a aresta e com peso 
+void imprime_aresta_com_peso(aresta e) {
+  int u_id = vertice_id(vertice_u(e));
+  int v_id = vertice_id(vertice_v(e));
+  printf("%d:{%d,%d}%d", aresta_id(e), u_id, v_id, peso_aresta(e));
+}
+
+/* 
+Alterar a estrutura de dados do programa anterior para que seja possível 
+representar um grafo ponderado. Atribua a cada aresta, como peso, a soma dos graus 
+dos seus vértices (isto é, das suas pontas).
+*/
+// atribui o peso peso da aresta e como a soma dos graus de suas pontas
+void atribui_peso(aresta e){
+  vertice u = vertice_u(e);
+  vertice v = vertice_v(e);
+  e->peso = grau(u) + grau(v);
 }

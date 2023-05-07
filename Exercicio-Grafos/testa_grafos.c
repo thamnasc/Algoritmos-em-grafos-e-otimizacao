@@ -42,6 +42,10 @@ int main() {
   // imprime informacoes do grafo e o destroi
   imprime_grafo(G);
 
+  // atribui pesos
+  atualiza_peso_arestas(G);
+  imprime_grafo_ponderado(G);
+
   ///// transforma em subgrafo /////
   int vertices[n];
 
@@ -60,8 +64,10 @@ int main() {
   for(int j = 0; j < n; j++)
     if(!vertices[j])
       remove_vertice((j+1), G);
+    
+  atualiza_peso_arestas(G);
 
-  imprime_grafo(G);
+  imprime_grafo_ponderado(G);
   destroi_grafo(G);
   
   return 0;
