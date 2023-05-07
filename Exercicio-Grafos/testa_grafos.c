@@ -10,6 +10,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void inicializa_vetor(int *v, int n)
+{
+  for(int i = 0; i < n; i++)
+    v[i] = 0;
+}
+
 int main() {
   
   // cria grafo vazio
@@ -34,6 +40,27 @@ int main() {
   }
   
   // imprime informacoes do grafo e o destroi
+  imprime_grafo(G);
+
+  ///// transforma em subgrafo /////
+  int vertices[n];
+
+  inicializa_vetor(vertices, n);
+
+  scanf("%d", &v);
+
+  // atribui 1 ao vértice que vai ser mantido no subgrafo
+  while (v)
+  {
+    vertices[v-1] = 1;
+    scanf("%d", &v);
+  }
+
+  // retira do grafo os vertices que nao fazem parte do subgrafo
+  for(int j = 0; j < n; j++)
+    if(!vertices[j])
+      remove_vertice((j+1), G);
+
   imprime_grafo(G);
   destroi_grafo(G);
   
